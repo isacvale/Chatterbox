@@ -1,12 +1,26 @@
 import { useEffect, useState } from "react";
 import netlifyIdentity from "netlify-identity-widget";
 import "./App.css";
+import { sendMessage } from "./utils/send-message";
+import { Chat } from "./components/Chat/Chat";
 
 export default function App() {
   const [user, setUser] = useState(null);
 
+  const displayName =
+    user?.user_metadata?.full_name ||
+    user?.user_metadata?.name ||
+    user?.email ||
+    "User";
+
   useEffect(() => {
     netlifyIdentity.init();
+
+    const displayName =
+      user?.user_metadata?.full_name ||
+      user?.user_metadata?.name ||
+      user?.email ||
+      "User";
 
     const user = netlifyIdentity.currentUser();
     if (user) {
@@ -19,15 +33,12 @@ export default function App() {
     });
 
     netlifyIdentity.on("logout", () => {
+      sendMessage({ text: `${displayName} left`, type: "system", displayName });
       setUser(null);
     });
   }, []);
 
-  const displayName =
-    user?.user_metadata?.full_name ||
-    user?.user_metadata?.name ||
-    user?.email ||
-    "User";
+  const isLoggedIn = !!user;
 
   return (
     <div style={{ padding: "2rem" }}>
@@ -41,6 +52,8 @@ export default function App() {
           <button onClick={() => netlifyIdentity.logout()}>Logout</button>
         </>
       )}
+
+      {isLoggedIn && <Chat user={user} />}
     </div>
   );
 }
