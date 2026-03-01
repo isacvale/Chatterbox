@@ -30,7 +30,7 @@ export const Chat = ({ user }) => {
 
     // Announce join
     sendMessage({
-      content: `${displayName} joined`,
+      text: `${displayName} joined`,
       role: "system",
       displayName: "",
     });
