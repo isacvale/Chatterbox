@@ -46,7 +46,9 @@ export const Chat = ({ user }) => {
           <Message key={msg.id} msg={msg} />
         ))}
       </div>
-      <TextInput onSend={(text) => sendMessage(text, "user", displayName)} />
+      <TextInput
+        onSend={(text) => sendMessage({ text, type: "user", displayName })}
+      />
     </div>
   );
 };
