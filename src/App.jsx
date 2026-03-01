@@ -22,6 +22,12 @@ export default function App() {
     }
 
     netlifyIdentity.on("login", (user) => {
+      const displayName =
+        user?.user_metadata?.full_name ||
+        user?.user_metadata?.name ||
+        user?.email ||
+        "User";
+
       sendMessage({
         text: `${displayName} joined`,
         type: "system",

@@ -1,6 +1,8 @@
 import { renderMarkdown } from "../../utils/render-markdown";
 
 export const Message = ({ msg }) => {
+  if (!msg.text) return null;
+
   if (msg.type === "system") {
     return (
       <div className="system-message">
