@@ -8,6 +8,11 @@ export default function App() {
   useEffect(() => {
     netlifyIdentity.init();
 
+    const user = netlifyIdentity.currentUser();
+    if (user) {
+      setUser(user);
+    }
+
     netlifyIdentity.on("login", (user) => {
       setUser(user);
       netlifyIdentity.close();
@@ -16,25 +21,23 @@ export default function App() {
     netlifyIdentity.on("logout", () => {
       setUser(null);
     });
-
-    const currentUser = netlifyIdentity.currentUser();
-    if (currentUser) {
-      setUser(currentUser);
-    }
   }, []);
+  
+return (
+  <div style={{ padding: "2rem" }}>
+    <h1>Pastel Chat</h1>
 
-  return (
-    <div className="container">
-      <h1>Pastel Chat</h1>
-
-      {!user ? (
-        <button onClick={() => netlifyIdentity.open()}>Login / Sign up</button>
-      ) : (
-        <>
-          <p>Welcome {user.user_metadata.full_name}</p>
-          <button onClick={() => netlifyIdentity.logout()}>Logout</button>
-        </>
-      )}
-    </div>
-  );
-}
+    {!user ? (
+      <button onClick={() => netlifyIdentity.open()}>
+        Login / Sign up
+      </button>
+    ) : (
+      <>
+        <p>Welcome {user.user_metadata?.full_name || user.email}</p>
+        <button onClick={() => netlifyIdentity.logout()}>
+          Logout
+        </button>
+      </>
+    )}
+  </div>
+);
