@@ -22,7 +22,13 @@ export default function App() {
       setUser(null);
     });
   }, []);
-  
+
+  const displayName =
+  user?.user_metadata?.full_name ||
+  user?.user_metadata?.name ||
+  user?.email ||
+  "User";
+
 return (
   <div style={{ padding: "2rem" }}>
     <h1>Pastel Chat</h1>
@@ -33,7 +39,7 @@ return (
       </button>
     ) : (
       <>
-        <p>Welcome {user.user_metadata?.full_name || user.email}</p>
+        <p>Welcome {displayName}</p>
         <button onClick={() => netlifyIdentity.logout()}>
           Logout
         </button>
