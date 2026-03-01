@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { fetchMessages } from "../../utils/fetch-messages";
 import { Message } from "../Message/Message";
 import { TextInput } from "../TextInput.js/TextInput";
@@ -38,6 +38,13 @@ export const Chat = ({ user }) => {
     };
   }, [user, lastTimestamp, displayName]);
 
+  const onSend = useCallback(
+    (text) => {
+      sendMessage({ text, type: "user", displayName });
+    },
+    [displayName],
+  );
+
   return (
     <div className="chat-container">
       <h2>Chat</h2>
@@ -46,9 +53,7 @@ export const Chat = ({ user }) => {
           <Message key={msg.id} msg={msg} />
         ))}
       </div>
-      <TextInput
-        onSend={(text) => sendMessage({ text, type: "user", displayName })}
-      />
+      <TextInput onSend={onSend} />
     </div>
   );
 };
