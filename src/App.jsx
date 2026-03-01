@@ -24,26 +24,23 @@ export default function App() {
   }, []);
 
   const displayName =
-  user?.user_metadata?.full_name ||
-  user?.user_metadata?.name ||
-  user?.email ||
-  "User";
+    user?.user_metadata?.full_name ||
+    user?.user_metadata?.name ||
+    user?.email ||
+    "User";
 
-return (
-  <div style={{ padding: "2rem" }}>
-    <h1>Pastel Chat</h1>
+  return (
+    <div style={{ padding: "2rem" }}>
+      <h1>Pastel Chat</h1>
 
-    {!user ? (
-      <button onClick={() => netlifyIdentity.open()}>
-        Login / Sign up
-      </button>
-    ) : (
-      <>
-        <p>Welcome {displayName}</p>
-        <button onClick={() => netlifyIdentity.logout()}>
-          Logout
-        </button>
-      </>
-    )}
-  </div>
-);
+      {!user ? (
+        <button onClick={() => netlifyIdentity.open()}>Login / Sign up</button>
+      ) : (
+        <>
+          <p>Welcome {displayName}</p>
+          <button onClick={() => netlifyIdentity.logout()}>Logout</button>
+        </>
+      )}
+    </div>
+  );
+}
