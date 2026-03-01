@@ -28,13 +28,6 @@ export const Chat = ({ user }) => {
       }
     }
 
-    // Announce join
-    sendMessage({
-      text: `${displayName} joined`,
-      role: "system",
-      displayName: "",
-    });
-
     const interval = setInterval(
       () => fetchMessages({ setMessages, setLastTimestamp, lastTimestamp }),
       1000,
