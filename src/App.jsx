@@ -16,12 +16,6 @@ export default function App() {
   useEffect(() => {
     netlifyIdentity.init();
 
-    const displayName =
-      user?.user_metadata?.full_name ||
-      user?.user_metadata?.name ||
-      user?.email ||
-      "User";
-
     const user = netlifyIdentity.currentUser();
     if (user) {
       setUser(user);
@@ -33,6 +27,12 @@ export default function App() {
     });
 
     netlifyIdentity.on("logout", () => {
+      const displayName =
+        user?.user_metadata?.full_name ||
+        user?.user_metadata?.name ||
+        user?.email ||
+        "User";
+
       sendMessage({ text: `${displayName} left`, type: "system", displayName });
       setUser(null);
     });

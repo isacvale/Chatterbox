@@ -1,5 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { fetchMessages } from "../../utils/fetch-messages";
+import { Message } from "../Message/Message";
+import { TextInput } from "../TextInput.js/TextInput";
+import { sendMessage } from "../../utils/send-message";
 
 export const Chat = ({ user }) => {
   const [messages, setMessages] = useState([]);
@@ -15,7 +18,7 @@ export const Chat = ({ user }) => {
     if (!user) return;
 
     // Load local history
-    const stored = localStorage.getItem("chat");
+    const stored = localStorage.getItem(`chat_${user.id}`);
     if (stored) {
       const parsed = JSON.parse(stored);
       setMessages(parsed);
@@ -26,7 +29,11 @@ export const Chat = ({ user }) => {
     }
 
     // Announce join
-    sendMessage(`${displayName} joined`, "system");
+    sendMessage({
+      content: `${displayName} joined`,
+      role: "system",
+      displayName: "",
+    });
 
     const interval = setInterval(
       () => fetchMessages({ setMessages, setLastTimestamp, lastTimestamp }),
@@ -36,24 +43,17 @@ export const Chat = ({ user }) => {
     return () => {
       clearInterval(interval);
     };
-  }, [user]);
+  }, [user, lastTimestamp, displayName]);
 
   return (
     <div className="chat-container">
       <h2>Chat</h2>
       <div className="chat-box">
         {messages.map((msg) => (
-          <div
-            key={msg.id}
-            className={
-              msg.type === "system" ? "system-message" : "chat-message"
-            }
-          >
-            {msg.type !== "system" && <strong>{msg.user}: </strong>}
-            {msg.text}
-          </div>
+          <Message key={msg.id} msg={msg} />
         ))}
       </div>
+      <TextInput onSend={(text) => sendMessage(text, "user", displayName)} />
     </div>
   );
 };
